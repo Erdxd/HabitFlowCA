@@ -2,23 +2,26 @@ package handlers
 
 import (
 	"HabitFlow/internal/domain/models"
+	"HabitFlow/internal/domain/service"
 	"HabitFlow/internal/http/middleware"
-	"HabitFlow/internal/http/service"
+
 	"log"
 	"net/http"
 )
 
 type HabitHandler struct {
 	HabitService *service.HabitService
+	Auth         *middleware.JWTToken
 }
 
-func NewHabitHandler(HabitService *service.HabitService) *HabitHandler {
-	return &HabitHandler{HabitService: HabitService}
+func NewHabitHandler(HabitService *service.HabitService, Auth *middleware.JWTToken) *HabitHandler {
+	return &HabitHandler{HabitService: HabitService, Auth: Auth}
 }
 func (h *HabitHandler) CheckHabit(w http.ResponseWriter, r *http.Request) {
-	Id_user, err := middleware.Cookie_userID(w, r)
+	Id_user, err := h.Auth.Cookie_userID(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
 	}
 	Habits, err := h.HabitService.CheckHabit(Id_user)
 	if err != nil {

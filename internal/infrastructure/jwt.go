@@ -1,4 +1,4 @@
-package middleware
+package infrastructure
 
 import (
 	"HabitFlow/internal/domain/models"
@@ -7,9 +7,15 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var JwtKey []byte
+type JWTService struct {
+	secretKey string
+}
 
-func GenerateToken(user_id int, admin bool) (string, error) {
+func NewJWTService(Key string) *JWTService {
+	return &JWTService{secretKey: Key}
+}
+
+func (sk *JWTService) GenerateToken(user_id int, admin bool) (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 	Claims := &models.Claims{
 		User_id: user_id,
@@ -19,15 +25,15 @@ func GenerateToken(user_id int, admin bool) (string, error) {
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, Claims)
-	tokenStting, err := token.SignedString(JwtKey)
+	tokenStting, err := token.SignedString(sk.secretKey)
 	if err != nil {
 		return "", err
 	}
 	return tokenStting, nil
 }
-func ValidateToken(tokenstr string) (*models.Claims, error) {
+func (sk *JWTService) ValidateToken(tokenstr string) (*models.Claims, error) {
 	claims := &models.Claims{}
-	token, err := jwt.ParseWithClaims(tokenstr, claims, func(token *jwt.Token) (interface{}, error) { return JwtKey, nil })
+	token, err := jwt.ParseWithClaims(tokenstr, claims, func(token *jwt.Token) (interface{}, error) { return sk.secretKey, nil })
 	if err != nil {
 		return nil, err
 

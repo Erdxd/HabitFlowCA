@@ -86,3 +86,4 @@ func (r *HabitRepository) DeleteAllHabits(user_id int) error {
 	return nil
 
 }
+
