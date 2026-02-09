@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель</title>
+</head>
+<body>
+
+<div class="card">
+
+    <div class="title">Админ-панель · Пользователи</div>
+
+    <div class="user header">
+        <span>ID</span>
+        <span>Логин</span>
+        <span>Email</span>
+        <span>Новый пароль</span>
+        <span>Действия</span>
+    </div>
+
+    {{range .Users}}
+    <div class="user">
+
+        <span>{{.id}}</span>
+        <span>{{.Username}}</span>
+        <span>{{.Email}}</span>
+
+        <form action="/admin/update-password" method="post">
+           <input type="hidden" name="id" value="{{.id}}">
+           <input type="password" name="password" placeholder="Новый пароль" required>
+        </form>
+
+        <div class="actions">
+            <form action="/admin/update-password" method="post">
+                <input type="hidden" name="Id" value="{{.Id}}">
+                <input type="hidden" name="password" value="">
+                <button class="update">Обновить</button>
+            </form>
+
+            <form action="/admin/delete-user" method="post">
+                <input type="hidden" name="id" value="{{.id}}">
+                <button class="delete">Удалить</button>
+            </form>
+        </div>
+    </div>
+
+    {{end}}
+
+    <form action="/" method="get">
+        <button class="back">Назад</button>
+    </form> 
+
+</div>
+
+</body>
+</html>

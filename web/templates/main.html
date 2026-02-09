@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HabitFlow</title>
+
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+
+<div class="container">
+
+    <form action="/add" method="post" class="card add-card">
+        <h3>Добавить привычку</h3>
+
+        <label>ID</label>
+        <div class="field">
+            <input type="number" min="1" name="Id" required>
+        </div>
+
+        <label>Привычка</label>
+        <div class="field">
+            <input type="text" name="Habit_Name" required>
+        </div>
+
+        <div class="checkbox">
+            <input type="checkbox" name="Status_Today">
+            <label>Выполнено сегодня</label>
+        </div>
+
+        <button type="submit" class="submit-btn">Добавить</button>
+    </form>
+
+    <div class="card list-card">
+        <h3>Список привычек</h3>
+
+        {{range .HabitAll}}
+        <div class="habit {{if .Status_Today}}completed{{end}}">
+            <div class="habit-info">
+                <span><b>{{.Habit_Name}}</b></span>
+                <span>ID: {{.Id}} · Дней подряд: {{.Streak}}</span>
+                <span>Статус: {{if .Status_Today}}Выполнено{{else}}Не выполнено{{end}}</span>
+            </div>
+
+            <div class="actions">
+                <form action="/change" method="post">
+                    <input type="hidden" name="Id" value="{{.Id}}">
+                    <input type="hidden" name="Streak" value="{{.Streak}}">
+                    <button class="btn change">Выполнил сегодня</button>
+                </form>
+
+                <form action="/delete" method="post">
+                    <input type="hidden" name="Id" value="{{.Id}}">
+                    <button class="btn delete">Удалить</button>
+                </form>
+            </div>
+        </div>
+        {{end}}
+
+    </div>
+
+</div>
+
+<p class="profile-link">
+    Ваш аккаунт <a href="/profile">Просмотреть</a>
+</p>
+
+</body>
+</html>
+
