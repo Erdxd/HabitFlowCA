@@ -4,6 +4,7 @@ import (
 	"HabitFlow/internal/domain/models"
 	"HabitFlow/internal/domain/service"
 	"HabitFlow/internal/http/middleware"
+	"text/template"
 
 	"log"
 	"net/http"
@@ -12,10 +13,19 @@ import (
 type HabitHandler struct {
 	HabitService *service.HabitService
 	Auth         *middleware.JWTToken
+	tmplmain     *template.Template
+}
+type Userhandler struct {
+	UserService *service.UserService
+	auth        *middleware.JWTToken
+	tmplmain    *template.Template
 }
 
-func NewHabitHandler(HabitService *service.HabitService, Auth *middleware.JWTToken) *HabitHandler {
-	return &HabitHandler{HabitService: HabitService, Auth: Auth}
+func NewHabitHandler(HabitService *service.HabitService, Auth *middleware.JWTToken, tmpl *template.Template) *HabitHandler {
+	return &HabitHandler{HabitService: HabitService, Auth: Auth, tmplmain: tmpl}
+}
+func NewUserHandler(HabitHandler *service.UserService, Auth *middleware.JWTToken, tmpl *template.Template) *Userhandler {
+	return &Userhandler{UserService: HabitHandler, auth: Auth, tmplmain: tmpl}
 }
 func (h *HabitHandler) CheckHabit(w http.ResponseWriter, r *http.Request) {
 	Id_user, err := h.Auth.Cookie_userID(w, r)
@@ -34,5 +44,5 @@ func (h *HabitHandler) CheckHabit(w http.ResponseWriter, r *http.Request) {
 	}{
 		HabitAll: Habits,
 	}
-	tmplmain.Execute(w, data)
+	h.tmplmain.ExecuteTemplate(w, "index.html", data)
 }

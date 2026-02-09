@@ -3,7 +3,6 @@ package service
 import (
 	"HabitFlow/internal/domain/models"
 	"HabitFlow/internal/domain/repositories"
-	"HabitFlow/internal/repository"
 	"errors"
 )
 
@@ -11,7 +10,7 @@ type HabitService struct {
 	repoS repositories.Habit
 }
 
-func NewHabitService(repo *repository.HabitRepository) *HabitService {
+func NewHabitService(repo repositories.Habit) *HabitService {
 	return &HabitService{repoS: repo}
 }
 func (s *HabitService) CheckHabit(id_user int) ([]models.HabitFlow, error) {
