@@ -1,0 +1,159 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1e1e2f, #2b2b45);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 16px;
+    color: #fff;
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    gap: 24px;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+
+.add-card {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.add-card h3 {
+    text-align: center;
+}
+
+label {
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+}
+
+.field {
+    height: 42px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    overflow: hidden;
+}
+
+.field input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0 12px;
+    color: #fff;
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+.submit-btn {
+    height: 42px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #6c63ff, #857dff);
+    color: #fff;
+    font-weight: 600;
+}
+
+.list-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.habit {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.habit.completed {
+    opacity: 0.6;
+}
+
+.habit-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.habit-info span {
+    font-size: 13px;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    color: #fff;
+    background: rgba(255,255,255,0.2);
+}
+
+.btn.delete {
+    background: rgba(255, 80, 80, 0.6);
+}
+
+.btn.change {
+    background: rgba(108, 99, 255, 0.6);
+}
+
+.profile-link {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.profile-link a {
+    color: #a8a5ff;
+    text-decoration: none;
+}
+
+.profile-link a:hover {
+    text-decoration: underline;
+}
+
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .add-card {
+        width: 100%;
+    }
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="stylesheet" href="/static/css/register.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+</head>
+<body>
+
+    <form action="/register" method="post" class="card">
+        <label for="username">Имя пользователя</label>
+        <div class="field">
+            <input type="text" name="username" id="username" placeholder="Введите имя">
+        </div>
+
+        <label for="email">Электронная почта</label>
+        <div class="field">
+            <input type="email" name="email" id="email" placeholder="example@mail.com">
+        </div>
+
+        <label for="password">Введите пароль</label>
+        <div class="field">
+            <input type="password" name="password" id="password" placeholder="Пароль">
+        </div>
+
+        <label for="password_repeat">Повторите пароль</label>
+        <div class="field short">
+            <input type="password" name="password_repeat" id="password_repeat" placeholder="Повтор пароля">
+        </div>
+
+        <div class="spacer"></div>
+
+        <button type="submit" class="submit-btn">
+            Зарегистрироваться
+        </button>
+        <p>Уже есть аккаунт? <a href="/login">Войдите</a></p>
+    </form>
+
+</body>
+</html>
