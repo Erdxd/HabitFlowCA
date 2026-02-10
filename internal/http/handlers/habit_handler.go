@@ -15,18 +15,11 @@ type HabitHandler struct {
 	Auth         *middleware.JWTToken
 	tmplmain     *template.Template
 }
-type Userhandler struct {
-	UserService *service.UserService
-	auth        *middleware.JWTToken
-	tmplmain    *template.Template
-}
 
 func NewHabitHandler(HabitService *service.HabitService, Auth *middleware.JWTToken, tmpl *template.Template) *HabitHandler {
 	return &HabitHandler{HabitService: HabitService, Auth: Auth, tmplmain: tmpl}
 }
-func NewUserHandler(HabitHandler *service.UserService, Auth *middleware.JWTToken, tmpl *template.Template) *Userhandler {
-	return &Userhandler{UserService: HabitHandler, auth: Auth, tmplmain: tmpl}
-}
+
 func (h *HabitHandler) CheckHabit(w http.ResponseWriter, r *http.Request) {
 	Id_user, err := h.Auth.Cookie_userID(w, r)
 	if err != nil {

@@ -4,30 +4,47 @@ import (
 	"HabitFlow/internal/auth"
 	"HabitFlow/internal/domain/models"
 	"HabitFlow/internal/domain/repositories"
+	"errors"
 	"log"
 )
 
 type UserService struct {
 	usersRepo repositories.User
 	hasher    auth.Hashing
+	jwt       auth.JWT
 }
 
 func NewuserService(users repositories.User, hasher auth.Hashing) *UserService {
 	return &UserService{usersRepo: users, hasher: hasher}
 }
-func (usS *UserService) Register(user models.User) error {
+func (usS *UserService) Register(user models.User, AgainPassword string) error {
+
+	if user.Password != AgainPassword {
+		return errors.New("Not matched with original password")
+
+	}
 	hashed, err := usS.hasher.Hash(user.Password)
 	if err != nil {
 		log.Println(err)
 		return err
 
 	}
+
 	user.Password = hashed
 	return usS.usersRepo.Register(user)
 
 }
-func (usS *UserService) GetPassword(Username string) (string, error) {
-	return usS.usersRepo.GetPassword(Username)
+func (usS *UserService) GetPassword(Username string, passwordfromuser string) error {
+	passwordfromdb, err := usS.usersRepo.GetPassword(Username)
+	if err != nil {
+		return errors.New("Wrong Login or Password")
+	}
+	compare := usS.hasher.Compare(passwordfromdb, passwordfromuser)
+	if !compare {
+		return errors.New("Wrong Login or Password")
+	}
+	return nil
+
 }
 func (usS *UserService) GetUserId(Username string) (int, error) {
 	return usS.usersRepo.GetUserId(Username)
@@ -54,4 +71,8 @@ func (usS *UserService) GetPasswordwithId(Id_user int) (string, error) {
 }
 func (usS *UserService) RedactPassword(NewHashedPassword string, id_user int) error {
 	return usS.usersRepo.RedactPassword(NewHashedPassword, id_user)
+}
+func (usS *UserService) GetAdmin(id_user int) (bool, error) {
+
+	return usS.usersRepo.GetAdmin(id_user)
 }

@@ -121,3 +121,12 @@ func (us *UserRepository) RedactPassword(NewHashedPassword string, id_user int) 
 	}
 	return nil
 }
+func (us *UserRepository) GetAdmin(id_user int) (bool, error) {
+	var Admin bool
+	SqlStatement := (`SELECT admin from users WHERE id_user = $1`)
+	err := us.db.QueryRow(SqlStatement).Scan(&Admin)
+	if err != nil {
+		return false, err
+	}
+	return Admin, nil
+}

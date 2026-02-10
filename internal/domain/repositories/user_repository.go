@@ -12,6 +12,7 @@ type User interface {
 	GetTelegramChatID(userID int) (int64, error)
 	GetUserIdByTgID(chatId int64) (int, error)
 	GetDataUser(id_user int) ([]models.UserBaseView, error)
+	GetAdmin(id_user int) (bool, error)
 	RedactLogin(user_id int, username string) error
 	GetPasswordwithId(Id_user int) (string, error)
 	RedactPassword(NewHashedPassword string, id_user int) error

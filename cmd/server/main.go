@@ -39,18 +39,19 @@ func main() {
 	log.Println("JWT Token:", jwt)
 	jwtservice := infrastructure.NewJWTService(jwt)
 	jwttoken := middleware.NewJwtKey(jwtservice)
+	jwtService2 := service.NewTokenService(jwtservice)
 	//authMiddleWare := middleware.NewAuthMiddleware(jwtservice)
 
 	habitRepository := repository.NewHabitRepository(db)
 	habitService := service.NewHabitService(habitRepository)
 	habitHanlder := handlers.NewHabitHandler(habitService, jwttoken, tmpl)
-	UserHanlder := handlers.NewUserHandler(userService, jwttoken, tmpl)
+	UserHanlder := handlers.NewUserHandler(userService, jwttoken, tmpl, jwtService2)
 
 	http.HandleFunc("/", habitHanlder.CheckHabit)
-	http.HandleFunc("/profile")
+	http.HandleFunc("/register", UserHanlder.Register)
+	http.HandleFunc("/login", UserHanlder.Login)
 
 	port := os.Getenv("PORT")
-	port = os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
