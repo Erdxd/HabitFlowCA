@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"HabitFlow/internal/domain/models"
 	"HabitFlow/internal/domain/service"
 	"HabitFlow/internal/http/middleware"
 	"net/http"
@@ -24,7 +23,8 @@ func (us *Userhandler) Register(w http.ResponseWriter, r *http.Request) {
 		Email := r.FormValue("email")
 		Password := r.FormValue("password")
 		PasswordRep := r.FormValue("password_repeat")
-		user := models.User{
+
+		user := service.UserRegisterResponse{
 			Username: Login,
 			Email:    Email,
 			Password: Password,

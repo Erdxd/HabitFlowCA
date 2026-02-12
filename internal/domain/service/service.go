@@ -6,6 +6,12 @@ import (
 	"errors"
 )
 
+type HabitResponse struct {
+	Habit_Name   string
+	Status_Today bool
+	Streak       int
+}
+
 type HabitService struct {
 	repoS repositories.Habit
 }
@@ -17,11 +23,18 @@ func (s *HabitService) CheckHabit(id_user int) ([]models.HabitFlow, error) {
 	return s.repoS.CheckHabit(id_user)
 }
 
-func (s *HabitService) AddHabitS(Habit models.HabitFlow, User_Id int) error {
+func (s *HabitService) AddHabitS(Habit HabitResponse, User_Id int) error {
 	if len(Habit.Habit_Name) == 0 {
 		return errors.New("Field `name` should be filled ")
 	}
-	return s.repoS.AddHabit(Habit, User_Id)
+	Habits := models.HabitFlow{
+		Habit_Name:   Habit.Habit_Name,
+		Status_Today: Habit.Status_Today,
+		Streak:       Habit.Streak,
+		User_Id:      User_Id,
+	}
+
+	return s.repoS.AddHabit(Habits, User_Id)
 }
 func (s *HabitService) DeleteHabitS(id, id_user int) error {
 	return s.repoS.DeleteHabit(id, id_user)

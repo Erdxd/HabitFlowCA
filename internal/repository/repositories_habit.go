@@ -36,7 +36,7 @@ func (r *HabitRepository) CheckHabit(Id_user int) ([]models.HabitFlow, error) {
 
 }
 func (r *HabitRepository) AddHabit(Habits models.HabitFlow, Id_user int) error {
-	SqlStatement := (`INSERT INTO "HabitFlow" (id, habit_name, status_today, streak, user_id) VALUES ($1,$2 ,$3,$4, $5)`)
+	SqlStatement := (`INSERT INTO "HabitFlow"  (habit_name, status_today, streak, user_id) VALUES ($1,$2 ,$3,$4, $5)`)
 	_, err := r.db.Exec(SqlStatement, Habits.Id, Habits.Habit_Name, Habits.Status_Today, Habits.Streak, Id_user)
 	if err != nil {
 		return err
@@ -86,4 +86,3 @@ func (r *HabitRepository) DeleteAllHabits(user_id int) error {
 	return nil
 
 }
-

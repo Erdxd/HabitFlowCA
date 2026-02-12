@@ -13,24 +13,35 @@ type UserService struct {
 	hasher    auth.Hashing
 	jwt       auth.JWT
 }
+type UserRegisterResponse struct {
+	Id_user  int
+	Username string
+	Email    string
+	Password string
+}
 
 func NewuserService(users repositories.User, hasher auth.Hashing) *UserService {
 	return &UserService{usersRepo: users, hasher: hasher}
 }
-func (usS *UserService) Register(user models.User, AgainPassword string) error {
+func (usS *UserService) Register(userh UserRegisterResponse, AgainPassword string) error {
 
-	if user.Password != AgainPassword {
+	if userh.Password != AgainPassword {
 		return errors.New("Not matched with original password")
 
 	}
-	hashed, err := usS.hasher.Hash(user.Password)
+	hashed, err := usS.hasher.Hash(userh.Password)
 	if err != nil {
 		log.Println(err)
 		return err
 
 	}
 
-	user.Password = hashed
+	userh.Password = hashed
+	user := models.User{
+		Username: userh.Username,
+		Email:    userh.Email,
+		Password: userh.Password,
+	}
 	return usS.usersRepo.Register(user)
 
 }

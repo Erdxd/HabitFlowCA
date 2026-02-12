@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	"HabitFlow/internal/domain/models"
 	"HabitFlow/internal/domain/service"
+	"HabitFlow/internal/http/dto"
 	"HabitFlow/internal/http/middleware"
+	"strconv"
 	"text/template"
 
 	"log"
@@ -26,16 +27,47 @@ func (h *HabitHandler) CheckHabit(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
+
 	Habits, err := h.HabitService.CheckHabit(Id_user)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	data := struct {
-		HabitAll []models.HabitFlow
-	}{
-		HabitAll: Habits,
+	var NewHabitDto []dto.ResponseHabitCheck
+	for _, habit := range Habits {
+		Habits := dto.ResponseHabitCheck{
+			Habit_Name:   habit.Habit_Name,
+			Status_Today: habit.Status_Today,
+			Streak:       habit.Streak,
+		}
+		NewHabitDto = append(NewHabitDto, Habits)
 	}
+
+	data := map[string]interface{}{
+		"Habits":  NewHabitDto,
+		"Id_user": Id_user,
+	}
+
 	h.tmplmain.ExecuteTemplate(w, "index.html", data)
+}
+func (h *HabitHandler) AddHabitHandler(w http.ResponseWriter, r *http.Request) {
+	Id_user, err := h.Auth.Cookie_userID(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), 401)
+		return
+	}
+	Habit_name := r.FormValue("Habit_name")
+	Status_Today := r.FormValue("Status_today") == "on"
+	Streak, err := strconv.Atoi(r.FormValue(""))
+	if err != nil {
+		http.Error(w, err.Error(), 400)
+	}
+	NewHabit := service.HabitResponse{
+		Habit_Name:   Habit_name,
+		Status_Today: Status_Today,
+		Streak:       Streak,
+	}
+
+	err = h.HabitService.AddHabitS(NewHabit, Id_user)
 }
