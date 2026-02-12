@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="stylesheet" href="/static/css/redact.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактирование логина</title>
+</head>
+<body>
+
+<div class="edit-card">
+
+    <div class="title">Редактировать логин</div>
+
+    <form action="/redact" method="post">
+
+        <div class="field">
+            <label>Новый логин</label>
+            <input
+                type="text"
+                name="new_login"
+                placeholder="Введите новый логин"
+                required
+            >
+        </div>
+
+        <div class="field">
+            <label>Подтвердите пароль</label>
+            <input
+                type="password"
+                name="password"
+                placeholder="Введите пароль"
+                required
+            >
+        </div>
+
+        <div class="actions">
+            <button class="save-btn">Сохранить</button>
+        </div>
+
+    </form>
+
+    <div class="back" onclick="history.back()">
+        ← Назад в профиль
+    </div>
+
+</div>
+
+</body>
+</html>

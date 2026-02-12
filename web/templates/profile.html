@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Личный кабинет</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/static/css/profile.css">
+</head>
+<body>
+
+{{range .DataAll}}
+<div class="profile-card">
+
+    <div class="left">
+        <div class="avatar">👤</div>
+        <div class="userid">User ID: <b>{{.Id_user}}</b></div>
+        <a class="tg-link" href="https://t.me/HabitFlowTracker_bot" target="_blank">
+            🤖 Telegram-бот
+        </a>
+    </div>
+
+    <div class="right">
+        <div class="title">Личный кабинет</div>
+
+        <div class="data-block">
+            <span>Логин</span>
+            <span>{{.Username}}</span>
+
+            <span>Email</span>
+            <span>{{.Email}}</span>
+
+            <span>Пароль</span>
+            <span class="password"
+                  data-password="{{.Password}}"
+                  onclick="togglePassword(this)">
+                ••••••••
+            </span>
+        </div>
+
+        <div class="actions">
+            <form action="/edit" method="get">
+                <button class="edit-btn">Редактировать данные</button>
+            </form>
+
+            <form action="/" method="get">
+                <button class="back-btn">← К привычкам</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+{{end}}
+
+<script src="/static/js/password.js"></script>
+</body>
+</html>

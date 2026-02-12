@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/login.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Войти в Аккаунт</title>
+</head>
+<body>
+    <form action="/login" method="post" class="card">
+        <div class="title">Вход</div>
+
+        <label for="Логин или email"></label>
+        <div class="field">
+            <input type="text" name="login" id="login" placeholder="Введите логин">
+        </div>
+
+        <label for="password"Пароль></label>
+        <div class="field">
+            <input type="password" name="password" id="password" placeholder="Введите пароль">
+        </div>
+
+        <button type="submit" class="submit-btn">Войти</button>
+</body>
+</html>
