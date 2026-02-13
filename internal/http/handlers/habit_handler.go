@@ -70,4 +70,22 @@ func (h *HabitHandler) AddHabitHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = h.HabitService.AddHabitS(NewHabit, Id_user)
+	if err != nil {
+		http.Error(w, err.Error(), 401)
+	}
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+
+}
+func (h *HabitHandler) DeleteHabitHandelr(w http.ResponseWriter, r *http.Request) {
+	Id_user, err := h.Auth.Cookie_userID(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), 401)
+	}
+	IdHabit, err := strconv.Atoi(r.FormValue("Id"))
+	err = h.HabitService.DeleteHabitS(IdHabit, Id_user)
+	if err != nil {
+		http.Error(w, err.Error(), 401)
+	}
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+
 }
