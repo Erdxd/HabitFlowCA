@@ -7,6 +7,7 @@ import (
 	"HabitFlow/internal/infrastructure/database"
 	"HabitFlow/internal/infrastructure/hashing"
 	infrastructure "HabitFlow/internal/infrastructure/jwt"
+	"HabitFlow/internal/infrastructure/scheduler"
 	"HabitFlow/internal/repository"
 	"log"
 	"net/http"
@@ -46,6 +47,9 @@ func main() {
 	habitService := service.NewHabitService(habitRepository)
 	habitHanlder := handlers.NewHabitHandler(habitService, jwttoken, tmpl)
 	UserHanlder := handlers.NewUserHandler(userService, jwttoken, tmpl, jwtService2)
+	cron := scheduler.NewScheduler()
+	cron.ResetStatus("00:00", func() { habitService.ResetAllStatusHabit() })
+	cron.Start()
 
 	http.HandleFunc("/", habitHanlder.CheckHabit)
 	http.HandleFunc("/register", UserHanlder.Register)
