@@ -70,3 +70,18 @@ func (P *ProfileHandler) RedactLoginHandler(w http.ResponseWriter, r *http.Reque
 	}
 	P.tmplmain.ExecuteTemplate(w, "redact.html", nil)
 }
+func (P *ProfileHandler) RedactPassword(w http.ResponseWriter, r *http.Request) {
+	Id_user, err := P.Auth.Cookie_userID(w, r)
+	if err != nil {
+		http.Error(w, err.Error(), 401)
+	}
+	currentpassword := r.FormValue("Oldpassword")
+	NewPassword := r.FormValue("Newpassword")
+
+	err = P.ProfileService.RedactPassword(NewPassword, Id_user, currentpassword)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/profile", http.StatusSeeOther)
+}

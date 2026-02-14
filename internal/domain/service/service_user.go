@@ -77,7 +77,7 @@ func (usS *UserService) GetDataUser(id_user int) ([]models.UserBaseView, error) 
 func (usS *UserService) RedactLogin(user_id int, username, Passworduser string) error {
 	passwordFromdb, err := usS.usersRepo.GetPasswordwithId(user_id)
 	if err != nil {
-		return errors.New("Wrong Password")
+		return errors.New("Something wrong")
 	}
 	Coincidence := usS.hasher.Compare(passwordFromdb, Passworduser)
 
@@ -91,8 +91,21 @@ func (usS *UserService) RedactLogin(user_id int, username, Passworduser string) 
 func (usS *UserService) GetPasswordwithId(Id_user int) (string, error) {
 	return usS.usersRepo.GetPasswordwithId(Id_user)
 }
-func (usS *UserService) RedactPassword(NewHashedPassword string, id_user int) error {
-	return usS.usersRepo.RedactPassword(NewHashedPassword, id_user)
+func (usS *UserService) RedactPassword(Newpassword string, id_user int, Oldpassword string) error {
+	PasswordFromdb, err := usS.usersRepo.GetPasswordwithId(id_user)
+	if err != nil {
+		return errors.New("Something wrong")
+	}
+	Coincidence := usS.hasher.Compare(PasswordFromdb, Oldpassword)
+	if !Coincidence {
+		return errors.New("Wrong Password")
+
+	}
+	NewpasswordHash, err := usS.hasher.Hash(Newpassword)
+	if err != nil {
+		return errors.New("Something wrong")
+	}
+	return usS.usersRepo.RedactPassword(NewpasswordHash, id_user)
 }
 func (usS *UserService) GetAdmin(id_user int) (bool, error) {
 
