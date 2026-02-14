@@ -74,7 +74,17 @@ func (usS *UserService) GetUserIdByTgID(chatId int64) (int, error) {
 func (usS *UserService) GetDataUser(id_user int) ([]models.UserBaseView, error) {
 	return usS.usersRepo.GetDataUser(id_user)
 }
-func (usS *UserService) RedactLogin(user_id int, username string) error {
+func (usS *UserService) RedactLogin(user_id int, username, Passworduser string) error {
+	passwordFromdb, err := usS.usersRepo.GetPasswordwithId(user_id)
+	if err != nil {
+		return errors.New("Wrong Password")
+	}
+	Coincidence := usS.hasher.Compare(passwordFromdb, Passworduser)
+
+	if !Coincidence {
+		return errors.New("Worng Password")
+	}
+
 	return usS.usersRepo.RedactLogin(user_id, username)
 }
 

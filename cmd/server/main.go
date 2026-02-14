@@ -47,6 +47,7 @@ func main() {
 	habitService := service.NewHabitService(habitRepository)
 	habitHanlder := handlers.NewHabitHandler(habitService, jwttoken, tmpl)
 	UserHanlder := handlers.NewUserHandler(userService, jwttoken, tmpl, jwtService2)
+	Profilehandler := handlers.NewProfileHandler(userService, jwttoken, tmpl)
 	cron := scheduler.NewScheduler()
 	cron.ResetStatus("00:00", func() { habitService.ResetAllStatusHabit() })
 	cron.Start()
@@ -54,6 +55,7 @@ func main() {
 	http.HandleFunc("/", habitHanlder.CheckHabit)
 	http.HandleFunc("/register", UserHanlder.Register)
 	http.HandleFunc("/login", UserHanlder.Login)
+	http.HandleFunc("/profile", Profilehandler.ProfileHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {
