@@ -48,14 +48,14 @@ func (us *UserRepository) SaveTelegramChatID(userID int, chatID int64) error {
 	_, err := us.db.Exec(Sqlstatement, chatID, userID)
 	return err
 }
-func (us *UserRepository) GetTelegramChatID(userID int) (int64, error) {
-	var TgChat int
+func (us *UserRepository) GetTelegramChatID(userID int64) (int64, error) {
+	var TgChat int64
 	Sqlstatement := (`SELECT telegram_chat_id FROM "users" WHERE id_user = $1`)
 	err := us.db.QueryRow(Sqlstatement, userID).Scan(&TgChat)
 	if err != nil {
 		return 0, err
 	}
-	return int64(TgChat), nil
+	return TgChat, nil
 
 }
 func (us *UserRepository) GetUserIdByTgID(chatId int64) (int, error) {

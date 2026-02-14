@@ -48,6 +48,6 @@ func (s *HabitService) GetStreakHabit(user_id, id int) (int, error) {
 func (s *HabitService) ResetAllStatusHabit() error {
 	return s.repoS.ResetAllStatusHabit()
 }
-func (s *HabitService) DeleteAllHabits(user_id int) error {
-	return s.repoS.DeleteAllHabits(user_id)
+func (s *HabitService) GetHabitsByTgId(TgId int64) ([]models.HabitFlow, error) {
+	return s.repoS.GetHabitsByTgId(TgId)
 }

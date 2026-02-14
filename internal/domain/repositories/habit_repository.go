@@ -9,5 +9,5 @@ type Habit interface {
 	ChangeStatusHabit(user_id, streak, id int) error
 	GetStreakHabit(user_id, id int) (int, error)
 	ResetAllStatusHabit() error
-	DeleteAllHabits(user_id int) error
+	GetHabitsByTgId(tgId int64) ([]models.HabitFlow, error)
 }

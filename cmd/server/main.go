@@ -8,6 +8,7 @@ import (
 	"HabitFlow/internal/infrastructure/hashing"
 	infrastructure "HabitFlow/internal/infrastructure/jwt"
 	"HabitFlow/internal/infrastructure/scheduler"
+	"HabitFlow/internal/infrastructure/telegram"
 	"HabitFlow/internal/repository"
 	"log"
 	"net/http"
@@ -38,6 +39,8 @@ func main() {
 	hasher := hashing.NewHashService()
 	userRepo := repository.NewUserRepository(db)
 	userService := service.NewuserService(userRepo, hasher)
+	tokentg := os.Getenv("TELEGRAM_BOT_TOKEN")
+
 	jwt := os.Getenv("JWT_TOKEN")
 	log.Println("JWT Token:", jwt)
 	jwtservice := infrastructure.NewJWTService(jwt)
@@ -56,6 +59,8 @@ func main() {
 	cron := scheduler.NewScheduler()
 	cron.ResetStatus("00:00", func() { habitService.ResetAllStatusHabit() })
 	cron.Start()
+	telegrambot := telegram.NewBot(tokentg, userService, habitService)
+	go telegrambot.HandleMessages()
 
 	http.HandleFunc("/", habitHanlder.CheckHabit)
 	http.HandleFunc("/register", UserHanlder.Register)

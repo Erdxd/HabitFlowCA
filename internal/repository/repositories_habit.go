@@ -36,7 +36,7 @@ func (r *HabitRepository) CheckHabit(Id_user int) ([]models.HabitFlow, error) {
 
 }
 func (r *HabitRepository) AddHabit(Habits models.HabitFlow, Id_user int) error {
-	SqlStatement := (`INSERT INTO "HabitFlow"  (habit_name, status_today, streak, user_id) VALUES ($1,$2 ,$3,$4, $5)`)
+	SqlStatement := (`INSERT INTO "HabitFlow"  (	habit_name, status_today, streak, user_id) VALUES ($1,$2 ,$3,$4, $5)`)
 	_, err := r.db.Exec(SqlStatement, Habits.Id, Habits.Habit_Name, Habits.Status_Today, Habits.Streak, Id_user)
 	if err != nil {
 		return err
@@ -84,5 +84,28 @@ func (r *HabitRepository) DeleteAllHabits(user_id int) error {
 		return err
 	}
 	return nil
+
+}
+func (r *HabitRepository) GetHabitsByTgId(TgId int64) ([]models.HabitFlow, error) {
+	rows, err := r.db.Query(`SELECT id, habit_name, status_today, streak 
+        FROM "HabitFlow" 
+        WHERE user_id = (SELECT id_user FROM users WHERE telegram_chat_id = $1)`, TgId)
+
+	if err != nil {
+		log.Println("Can't SELECT data by your tables")
+		log.Println(err)
+		return nil, err
+	}
+	defer rows.Close()
+	var habits []models.HabitFlow
+	for rows.Next() {
+		var habit models.HabitFlow
+		err := rows.Scan(&habit.Id, &habit.Habit_Name, &habit.Status_Today, &habit.Streak)
+		if err != nil {
+			return nil, err
+		}
+		habits = append(habits, habit)
+	}
+	return habits, nil
 
 }

@@ -64,7 +64,7 @@ func (usS *UserService) GetUserId(Username string) (int, error) {
 func (usS *UserService) SaveTelegramChatID(userId int, chatId int64) error {
 	return usS.usersRepo.SaveTelegramChatID(userId, chatId)
 }
-func (usS *UserService) GetTelegramChatID(user_id int) (int64, error) {
+func (usS *UserService) GetTelegramChatID(user_id int64) (int64, error) {
 	return usS.usersRepo.GetTelegramChatID(user_id)
 
 }

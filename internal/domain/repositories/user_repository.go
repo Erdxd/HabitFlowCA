@@ -9,7 +9,7 @@ type User interface {
 	Login(Username string) (string, error)
 	GetUserId(Username string) (int, error)
 	SaveTelegramChatID(userID int, chatID int64) error
-	GetTelegramChatID(userID int) (int64, error)
+	GetTelegramChatID(userID int64) (int64, error)
 	GetUserIdByTgID(chatId int64) (int, error)
 	GetDataUser(id_user int) ([]models.UserBaseView, error)
 	GetAdmin(id_user int) (bool, error)
