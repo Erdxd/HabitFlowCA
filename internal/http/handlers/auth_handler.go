@@ -15,8 +15,8 @@ type Userhandler struct {
 	jwtservice  *service.TokenService
 }
 
-func NewUserHandler(HabitHandler *service.UserService, Auth *middleware.JWTToken, tmpl *template.Template, jwt *service.TokenService) *Userhandler {
-	return &Userhandler{UserService: HabitHandler, auth: Auth, tmplmain: tmpl, jwtservice: jwt}
+func NewUserHandler(UserHandler *service.UserService, Auth *middleware.JWTToken, tmpl *template.Template, jwt *service.TokenService) *Userhandler {
+	return &Userhandler{UserService: UserHandler, auth: Auth, tmplmain: tmpl, jwtservice: jwt}
 }
 func (us *Userhandler) Register(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {

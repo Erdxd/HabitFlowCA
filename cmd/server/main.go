@@ -22,6 +22,8 @@ func main() {
 	if err != nil {
 		log.Println(err)
 	}
+	fs := http.FileServer(http.Dir("web/static"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
 	tmpl, err := template.ParseGlob("web/templates/*.html")
 	if err != nil {
 		log.Println(err)
@@ -41,7 +43,10 @@ func main() {
 	jwtservice := infrastructure.NewJWTService(jwt)
 	jwttoken := middleware.NewJwtKey(jwtservice)
 	jwtService2 := service.NewTokenService(jwtservice)
-	//authMiddleWare := middleware.NewAuthMiddleware(jwtservice)
+	AdminRepository := repository.NewAdminRepo(db)
+	AdminService := service.NewAdminService(AdminRepository, hasher)
+	AdminHandler := handlers.NewAdminHandler(AdminService, jwttoken, tmpl, jwtService2)
+	authMiddleWare := middleware.NewAuthMiddleware(jwtservice)
 
 	habitRepository := repository.NewHabitRepository(db)
 	habitService := service.NewHabitService(habitRepository)
@@ -56,6 +61,11 @@ func main() {
 	http.HandleFunc("/register", UserHanlder.Register)
 	http.HandleFunc("/login", UserHanlder.Login)
 	http.HandleFunc("/profile", Profilehandler.ProfileHandler)
+	http.HandleFunc("/redactlogin", Profilehandler.RedactLoginHandler)
+	http.HandleFunc("/redactpassword", Profilehandler.RedactPassword)
+	http.HandleFunc("/admin/users", authMiddleWare.AdminOnly(AdminHandler.CheckUsers))
+	http.HandleFunc("/admin/update-user", authMiddleWare.AdminOnly(AdminHandler.UpdatePassword))
+	http.HandleFunc("/admin/delete-user", authMiddleWare.AdminOnly(AdminHandler.DeleteUser))
 
 	port := os.Getenv("PORT")
 	if port == "" {
