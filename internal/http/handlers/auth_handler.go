@@ -3,6 +3,7 @@ package handlers
 import (
 	"HabitFlow/internal/domain/service"
 	"HabitFlow/internal/http/middleware"
+	"log"
 	"net/http"
 	"text/template"
 )
@@ -41,9 +42,10 @@ func (us *Userhandler) Register(w http.ResponseWriter, r *http.Request) {
 }
 func (us *Userhandler) Login(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-		Login := r.FormValue("username")
+		Login := r.FormValue("login")
 		Password := r.FormValue("password")
-		err := us.UserService.GetPassword(Login, Password)
+		err := us.UserService.Login(Login, Password)
+
 		if err != nil {
 			http.Error(w, "wrong login or password", 401)
 			return
@@ -51,19 +53,26 @@ func (us *Userhandler) Login(w http.ResponseWriter, r *http.Request) {
 
 		ID_user, err := us.UserService.GetUserId(Login)
 		if err != nil {
-			http.Error(w, "something wrong", 500)
+			log.Println(err)
+			http.Error(w, "something wrong3", 500)
 			return
 		}
+
 		Admin, err := us.UserService.GetAdmin(ID_user)
 		if err != nil {
-			http.Error(w, "something wrong", 500)
+
+			http.Error(w, "something wrong2", 500)
 			return
 		}
 		token, err := us.jwtservice.CreateToken(ID_user, Admin)
+		log.Println(token)
+		log.Println(Admin)
 		if err != nil {
-			http.Error(w, "something wrong", 500)
+
+			http.Error(w, "something wrong1", 500)
 			return
 		}
+
 		http.SetCookie(w, &http.Cookie{
 			Name:     "token",
 			Value:    token,

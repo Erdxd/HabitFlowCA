@@ -24,9 +24,9 @@ func (us *UserRepository) Register(Users models.User) error {
 	return nil
 
 }
-func (us *UserRepository) GetPassword(Username string) (string, error) {
+func (us *UserRepository) Login(Username string) (string, error) {
 	var Password string
-	Sqlstatement := (`SELECT password FROM "users" WHERE username =$1`)
+	Sqlstatement := (`SELECT password FROM users WHERE username = $1`)
 	err := us.db.QueryRow(Sqlstatement, Username).Scan(&Password)
 	if err != nil {
 		return "", err
@@ -124,7 +124,7 @@ func (us *UserRepository) RedactPassword(NewHashedPassword string, id_user int) 
 func (us *UserRepository) GetAdmin(id_user int) (bool, error) {
 	var Admin bool
 	SqlStatement := (`SELECT admin from users WHERE id_user = $1`)
-	err := us.db.QueryRow(SqlStatement).Scan(&Admin)
+	err := us.db.QueryRow(SqlStatement, id_user).Scan(&Admin)
 	if err != nil {
 		return false, err
 	}

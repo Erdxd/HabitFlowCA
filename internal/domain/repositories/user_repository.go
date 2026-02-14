@@ -6,7 +6,7 @@ import (
 
 type User interface {
 	Register(user models.User) error
-	GetPassword(Username string) (string, error)
+	Login(Username string) (string, error)
 	GetUserId(Username string) (int, error)
 	SaveTelegramChatID(userID int, chatID int64) error
 	GetTelegramChatID(userID int) (int64, error)

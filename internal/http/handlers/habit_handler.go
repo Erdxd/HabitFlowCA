@@ -49,7 +49,7 @@ func (h *HabitHandler) CheckHabit(w http.ResponseWriter, r *http.Request) {
 		"Id_user": Id_user,
 	}
 
-	h.tmplmain.ExecuteTemplate(w, "index.html", data)
+	h.tmplmain.ExecuteTemplate(w, "main.html", data)
 }
 func (h *HabitHandler) AddHabitHandler(w http.ResponseWriter, r *http.Request) {
 	Id_user, err := h.Auth.Cookie_userID(w, r)
@@ -85,6 +85,32 @@ func (h *HabitHandler) DeleteHabitHandelr(w http.ResponseWriter, r *http.Request
 	err = h.HabitService.DeleteHabitS(IdHabit, Id_user)
 	if err != nil {
 		http.Error(w, err.Error(), 401)
+	}
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+
+}
+func (h *HabitHandler) UpdateStatusHabit(w http.ResponseWriter, r *http.Request) {
+	Id_user, err := h.Auth.Cookie_userID(w, r)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+	}
+	if r.Method == "POST" {
+		Id, err := strconv.Atoi(r.FormValue("Id"))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		streak, err := h.HabitService.GetStreakHabit(Id_user, Id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		err = h.HabitService.ChangeStatusHabit(Id, streak, Id_user)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
 	}
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 

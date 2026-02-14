@@ -25,7 +25,7 @@ func (sk *JWTService) GenerateToken(user_id int, admin bool) (string, error) {
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, Claims)
-	tokenStting, err := token.SignedString(sk.secretKey)
+	tokenStting, err := token.SignedString([]byte(sk.secretKey))
 	if err != nil {
 		return "", err
 	}
@@ -33,7 +33,7 @@ func (sk *JWTService) GenerateToken(user_id int, admin bool) (string, error) {
 }
 func (sk *JWTService) ValidateToken(tokenstr string) (*models.Claims, error) {
 	claims := &models.Claims{}
-	token, err := jwt.ParseWithClaims(tokenstr, claims, func(token *jwt.Token) (interface{}, error) { return sk.secretKey, nil })
+	token, err := jwt.ParseWithClaims(tokenstr, claims, func(token *jwt.Token) (interface{}, error) { return []byte(sk.secretKey), nil })
 	if err != nil {
 		return nil, err
 

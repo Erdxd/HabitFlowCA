@@ -45,8 +45,9 @@ func (usS *UserService) Register(userh UserRegisterResponse, AgainPassword strin
 	return usS.usersRepo.Register(user)
 
 }
-func (usS *UserService) GetPassword(Username string, passwordfromuser string) error {
-	passwordfromdb, err := usS.usersRepo.GetPassword(Username)
+func (usS *UserService) Login(Username string, passwordfromuser string) error {
+	passwordfromdb, err := usS.usersRepo.Login(Username)
+
 	if err != nil {
 		return errors.New("Wrong Login or Password")
 	}
