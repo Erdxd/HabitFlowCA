@@ -29,19 +29,19 @@
         <span>{{.Email}}</span>
 
         <form action="/admin/update-password" method="post">
-           <input type="hidden" name="id" value="{{.id}}">
+           <input type="hidden" name="Id_user" value="Id_user">
            <input type="password" name="password" placeholder="Новый пароль" required>
         </form>
 
         <div class="actions">
             <form action="/admin/update-password" method="post">
-                <input type="hidden" name="Id" value="{{.Id}}">
+                <input type="hidden" name="Id_user" value="Id_user">
                 <input type="hidden" name="password" value="">
                 <button class="update">Обновить</button>
             </form>
 
             <form action="/admin/delete-user" method="post">
-                <input type="hidden" name="id" value="{{.id}}">
+                <input type="hidden" name="Id_user" value="Id_user">
                 <button class="delete">Удалить</button>
             </form>
         </div>
