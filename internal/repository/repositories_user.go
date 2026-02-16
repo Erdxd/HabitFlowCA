@@ -4,7 +4,6 @@ import (
 	"HabitFlow/internal/domain/models"
 	"HabitFlow/internal/domain/repositories"
 	"database/sql"
-	"log"
 )
 
 type UserRepository struct {
@@ -70,12 +69,11 @@ func (us *UserRepository) GetUserIdByTgID(chatId int64) (int, error) {
 
 }
 func (us *UserRepository) GetDataUser(id_user int) ([]models.UserBaseView, error) {
-	log.Println("GetDataUser called with id_user:", id_user)
+
 	rows, err := us.db.Query(`SELECT id_user,username,email,password FROM users WHERE id_user = $1`, id_user)
 
 	if err != nil {
-		log.Println("Can't SELECT data by your tables")
-		log.Println(err)
+
 		return nil, err
 	}
 	defer rows.Close()

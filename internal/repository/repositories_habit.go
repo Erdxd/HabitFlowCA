@@ -4,7 +4,6 @@ import (
 	"HabitFlow/internal/domain/models"
 	"HabitFlow/internal/domain/repositories"
 	"database/sql"
-	"log"
 )
 
 type HabitRepository struct {
@@ -18,8 +17,7 @@ func (r *HabitRepository) CheckHabit(Id_user int) ([]models.HabitFlow, error) {
 	rows, err := r.db.Query(`SELECT id, habit_name, status_today, streak FROM "HabitFlow" WHERE user_id= $1`, Id_user)
 
 	if err != nil {
-		log.Println("Can't SELECT data by your tables")
-		log.Println(err)
+
 		return nil, err
 	}
 	defer rows.Close()
@@ -92,8 +90,7 @@ func (r *HabitRepository) GetHabitsByTgId(TgId int64) ([]models.HabitFlow, error
         WHERE user_id = (SELECT id_user FROM users WHERE telegram_chat_id = $1)`, TgId)
 
 	if err != nil {
-		log.Println("Can't SELECT data by your tables")
-		log.Println(err)
+
 		return nil, err
 	}
 	defer rows.Close()

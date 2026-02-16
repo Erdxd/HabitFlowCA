@@ -65,8 +65,7 @@ func (us *Userhandler) Login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		token, err := us.jwtservice.CreateToken(ID_user, Admin)
-		log.Println(token)
-		log.Println(Admin)
+
 		if err != nil {
 
 			http.Error(w, "something wrong1", 500)

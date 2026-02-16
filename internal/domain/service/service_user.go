@@ -5,7 +5,6 @@ import (
 	"HabitFlow/internal/domain/models"
 	"HabitFlow/internal/domain/repositories"
 	"errors"
-	"log"
 )
 
 type UserService struct {
@@ -31,7 +30,7 @@ func (usS *UserService) Register(userh UserRegisterResponse, AgainPassword strin
 	}
 	hashed, err := usS.hasher.Hash(userh.Password)
 	if err != nil {
-		log.Println(err)
+
 		return err
 
 	}

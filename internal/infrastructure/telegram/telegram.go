@@ -3,7 +3,6 @@ package telegram
 import (
 	"HabitFlow/internal/domain/service"
 	"fmt"
-	"log"
 	"strconv"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -70,7 +69,7 @@ func (tg *Bot) HandleMessages() {
 
 				err = tg.UserService.SaveTelegramChatID(userID, update.Message.Chat.ID)
 				if err != nil {
-					log.Println(err)
+
 					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Ошибка привязки чата")
 					tg.api.Send(msg)
 					continue

@@ -31,7 +31,7 @@ func main() {
 	}
 
 	urlDb := os.Getenv("DATABASE_URL")
-	log.Println("Database URL:", urlDb)
+
 	db, err := database.InitDb(urlDb)
 	if err != nil {
 		log.Println(err)
@@ -42,7 +42,7 @@ func main() {
 	tokentg := os.Getenv("TELEGRAM_BOT_TOKEN")
 
 	jwt := os.Getenv("JWT_TOKEN")
-	log.Println("JWT Token:", jwt)
+
 	jwtservice := infrastructure.NewJWTService(jwt)
 	jwttoken := middleware.NewJwtKey(jwtservice)
 	jwtService2 := service.NewTokenService(jwtservice)
